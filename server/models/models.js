@@ -1,4 +1,3 @@
-const { DATE } = require('sequelize')
 const sequelize = require('../db')
 const { DataTypes } = require('sequelize')
 
