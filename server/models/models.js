@@ -55,7 +55,7 @@ Basket.belongsTo(User) // корзина принадлежит пользова
 User.hasMany(Rating)
 Rating.belongsTo(User)
 
-Basket.hasMany(BasketDevice)
+Basket.hasMany(BasketDevice)  
 BasketDevice.belongsTo(Basket)
 
 Type.hasMany(Device)
