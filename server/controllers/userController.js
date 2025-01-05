@@ -23,17 +23,17 @@ class UserController {
 			process.env.SECRET_KEY,
 			{ expiresIn: '24h' }
 		)
-		 return res.json({ token })
+		return res.json({ token })
 	}
 
-	async login(req, res) {}
+	async login(req, res, next) {}
 
 	async check(req, res, next) {
 		const { id } = req.query
 		if (!id) {
 			return next(ApiError.badRequest('Не задан ID'))
 		}
-		res.json(id)
+		return res.json(id)
 	}
 }
 

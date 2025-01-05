@@ -1,6 +1,7 @@
 const uuid = require('uuid')
 const path = require('path')
-const { Device } = require('../models/models')
+const { Device, DeviceInfo } = require('../models/models')
+const ApiError = require('../error/ApiError')
 
 class deviceController {
 	async create(req, res) {
@@ -9,6 +10,8 @@ class deviceController {
 			const { img } = req.files
 			let fileName = uuid.v4() + '.jpg'
 			img.mv(path.resolve(__dirname, '..', 'static', fileName))
+
+      // if {info} 
 
 			const device = await Device.create({
 				name,
@@ -50,7 +53,19 @@ class deviceController {
 		return res.json(devices)
 	}
 
-	async getOne(req, res) {}
+	async getOne(req, res) {
+    const {id} = req.params
+    const device = await Device.findOne(
+      {where: {id},
+      include: [{}]}
+    )
+    return res.json(device)
+  }
+
+	async update(req, res) {}
+
+	async delete(req, res) {}
+
 }
 
 module.exports = new deviceController()
