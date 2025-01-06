@@ -20,7 +20,6 @@ class BrandController {
 
   async update(req, res) {
 		const { id, name } = req.body
-
 		const [, [updatedBrand]] = await Brand.update(
 			{ name },
 			{

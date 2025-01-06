@@ -20,7 +20,6 @@ class TypeController {
 
 	async update(req, res) {
 		const { id, name } = req.body
-
 		const [, [updatedType]] = await Type.update(
 			{ name },
 			{
