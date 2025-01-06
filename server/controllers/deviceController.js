@@ -11,15 +11,24 @@ class deviceController {
 			let fileName = uuid.v4() + '.jpg'
 			img.mv(path.resolve(__dirname, '..', 'static', fileName))
 
-			// if {info}
-
-			const device = await Device.create({
+      const device = await Device.create({
 				name,
 				price,
 				brandId,
 				typeId,
 				img: fileName,
 			})
+
+			if (info) {
+				info = JSON.parse(info)
+        info.forEach(i => {
+          DeviceInfo.create({
+            title: i.title,
+            description: i.description,
+            deviceId: device.id
+          })
+        });
+			}
 
 			return res.json(device)
 		} catch (error) {
@@ -63,13 +72,31 @@ class deviceController {
 
 	async getOne(req, res) {
 		const { id } = req.params
-		const device = await Device.findOne({ where: { id }, include: [{}] })
+		const device = await Device.findOne({
+			where: { id },
+			include: [{ model: DeviceInfo, as: 'info' }],
+		})
 		return res.json(device)
 	}
 
-	async update(req, res) {}
+	async update(req, res) {
+		const { id, name, price, img } = req.body
 
-	async delete(req, res) {}
+		const [, [updatedDevice]] = await Device.update(
+			{ name, price, img },
+			{
+				where: { id },
+				returning: true,
+			}
+		)
+		return res.json(updatedDevice)
+	}
+
+	async delete(req, res) {
+		const removedDevice = await Device.findByPk(req.params.id)
+		await removedDevice.destroy()
+		return res.json(removedDevice)
+	}
 }
 
 module.exports = new deviceController()

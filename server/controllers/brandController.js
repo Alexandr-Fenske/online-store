@@ -13,13 +13,13 @@ class BrandController {
 		return res.json(brands)
 	}
 
-  async getOne(req, res) {
-    const brand = await Brand.findByPk(req.params.id)
-    return res.json(brand)
-  }
+	async getOne(req, res) {
+		const brand = await Brand.findByPk(req.params.id)
+		return res.json(brand)
+	}
 
   async update(req, res) {
-    const { id, name } = req.body
+		const { id, name } = req.body
 
 		const [, [updatedBrand]] = await Brand.update(
 			{ name },
@@ -28,14 +28,15 @@ class BrandController {
 				returning: true,
 			}
 		)
-    return res.json(updatedBrand)
-  }
+		return res.json(updatedBrand)
+	}
 
-  async delete(req, res) {
-    const removedBrand = await Brand.findByPk(req.params.id)
+
+	async delete(req, res) {
+		const removedBrand = await Brand.findByPk(req.params.id)
 		await removedBrand.destroy()
 		return res.json(removedBrand)
-  }
+	}
 }
 
 module.exports = new BrandController()
