@@ -14,18 +14,27 @@ class BrandController {
 	}
 
   async getOne(req, res) {
-    const brand = await Type.findByPk(req.params.id)
+    const brand = await Brand.findByPk(req.params.id)
     return res.json(brand)
   }
 
   async update(req, res) {
-    const updatedBrand = await Type.update(req.body)
+    const { id, name } = req.body
+
+		const [, [updatedBrand]] = await Brand.update(
+			{ name },
+			{
+				where: { id },
+				returning: true,
+			}
+		)
     return res.json(updatedBrand)
   }
 
   async delete(req, res) {
-    const removedBrand = await Type.delete(req.params.id)
-    return res.json(removedBrand)
+    const removedBrand = await Brand.findByPk(req.params.id)
+		await removedBrand.destroy()
+		return res.json(removedBrand)
   }
 }
 

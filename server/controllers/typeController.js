@@ -13,21 +13,29 @@ class TypeController {
 		return res.json(types)
 	}
 
-  async getOne(req, res) {
-    const type = await Type.findByPk(req.params.id)
-    return res.json(type)
-  }
+	async getOne(req, res) {
+		const type = await Type.findByPk(req.params.id)
+		return res.json(type)
+	}
 
-  async update(req, res) {
-    const updatedType = await Type.update(req.body)
-    return res.json(updatedType)
-  }
+	async update(req, res) {
+		const { id, name } = req.body
 
-  async delete(req, res) {
-    const removedPost = await Type.delete(req.params.id)
-    return res.json(removedPost)
-  }
+		const [, [updatedType]] = await Type.update(
+			{ name },
+			{
+				where: { id },
+				returning: true,
+			}
+		)
+		return res.json(updatedType)
+	}
 
+	async delete(req, res) {
+		const removedType = await Type.findByPk(req.params.id)
+		await removedType.destroy()
+		return res.json(removedType)
+	}
 }
 
 module.exports = new TypeController()

@@ -11,7 +11,7 @@ class deviceController {
 			let fileName = uuid.v4() + '.jpg'
 			img.mv(path.resolve(__dirname, '..', 'static', fileName))
 
-      // if {info} 
+			// if {info}
 
 			const device = await Device.create({
 				name,
@@ -37,10 +37,18 @@ class deviceController {
 			devices = await Device.findAndCountAll({ limit, offset })
 		}
 		if (brandId && !typeId) {
-			devices = await Device.findAndCountAll({ where: { brandId }, limit, offset })
+			devices = await Device.findAndCountAll({
+				where: { brandId },
+				limit,
+				offset,
+			})
 		}
 		if (!brandId && typeId) {
-			devices = await Device.findAndCountAll({ where: { typeId }, limit, offset })
+			devices = await Device.findAndCountAll({
+				where: { typeId },
+				limit,
+				offset,
+			})
 		}
 		if (brandId && typeId) {
 			devices = await Device.findAndCountAll({
@@ -54,18 +62,14 @@ class deviceController {
 	}
 
 	async getOne(req, res) {
-    const {id} = req.params
-    const device = await Device.findOne(
-      {where: {id},
-      include: [{}]}
-    )
-    return res.json(device)
-  }
+		const { id } = req.params
+		const device = await Device.findOne({ where: { id }, include: [{}] })
+		return res.json(device)
+	}
 
 	async update(req, res) {}
 
 	async delete(req, res) {}
-
 }
 
 module.exports = new deviceController()

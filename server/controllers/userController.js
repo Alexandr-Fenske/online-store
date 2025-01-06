@@ -26,7 +26,13 @@ class UserController {
 		return res.json({ token })
 	}
 
-	async login(req, res, next) {}
+	async login(req, res, next) {
+    const {email, password} = req.query
+    const user = await User.findOne({where: {email}})
+    if (!user) {
+      return next(ApiError.internal('Пользователь не найден'))
+    }
+  }
 
 	async check(req, res, next) {
 		const { id } = req.query
