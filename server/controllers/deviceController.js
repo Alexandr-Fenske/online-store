@@ -4,12 +4,12 @@ const { Device, DeviceInfo } = require('../models/models')
 const ApiError = require('../error/ApiError')
 
 class deviceController {
-	async create(req, res) {
+	async create(req, res, next) {
 		try {
-			const { name, price, brandId, typeId, info } = req.body
+			let { name, price, brandId, typeId, info } = req.body
 			const { img } = req.files
 			let fileName = uuid.v4() + '.jpg'
-			img.mv(path.resolve(__dirname, '..', 'static', fileName))
+			img.mv(path.resolve(__dirname, '../', 'static', fileName))
 
       const device = await Device.create({
 				name,
@@ -20,7 +20,7 @@ class deviceController {
 			})
 
 			if (info) {
-				info = JSON.parse(info)
+				info = JSON.parse(info) // при передаче данных через formData они приходят в виде строки
         info.forEach(i => {
           DeviceInfo.create({
             title: i.title,
@@ -44,7 +44,7 @@ class deviceController {
 		let devices
 		if (!brandId && !typeId) {
 			devices = await Device.findAndCountAll({ limit, offset })
-		}
+		} 
 		if (brandId && !typeId) {
 			devices = await Device.findAndCountAll({
 				where: { brandId },
